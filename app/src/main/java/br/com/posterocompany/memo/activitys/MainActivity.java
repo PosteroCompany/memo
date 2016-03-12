@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,9 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 
 import java.util.List;
 
@@ -21,13 +24,15 @@ import br.com.posterocompany.memo.R;
 import br.com.posterocompany.memo.adapters.NotesAdapter;
 import br.com.posterocompany.memo.models.Note;
 import br.com.posterocompany.memo.utils.DividerItemDecoration;
+import br.com.posterocompany.memo.utils.ItemClickSupport;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
 
     public static int REQUEST_NOTE_ADD = 1;
 
     private List<Note> notes;
+    private Note selectedNote;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -82,8 +87,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 startActivityForResult(new Intent(MainActivity.this, NoteAdd.class), REQUEST_NOTE_ADD);
             }
         });
@@ -107,6 +110,36 @@ public class MainActivity extends AppCompatActivity
         adapter = new NotesAdapter(notes);
         recyclerView.setAdapter(adapter);
 
+        setRecyclerViewItemClicks();
+
+    }
+
+    public void setRecyclerViewItemClicks() {
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Note note = notes.get(position);
+                Snackbar.make(v, note.text, Snackbar.LENGTH_LONG).show();
+            }
+        });
+        ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
+                selectedNote = notes.get(position);
+
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this,v,Gravity.END);
+                popupMenu.setOnMenuItemClickListener(MainActivity.this);
+                popupMenu.inflate(R.menu.popup_note_menu);
+                popupMenu.show();
+                return true;
+            }
+        });
+    }
+
+    public void deleteNote(){
+        notes.remove(selectedNote);
+        adapter.notifyDataSetChanged();
+        Snackbar.make(recyclerView, "Note deleted with success! ", Snackbar.LENGTH_SHORT).show();
 
     }
 
@@ -117,11 +150,20 @@ public class MainActivity extends AppCompatActivity
                 Long noteId = data.getLongExtra("noteId", 0);
                 if (noteId != 0) {
                     Note note = Note.findById(Note.class, noteId);
-
                     notes.add(0, note);
                     adapter.notifyDataSetChanged();
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.act_delete:
+                this.deleteNote();
+                return true;
+        }
+        return false;
     }
 }
