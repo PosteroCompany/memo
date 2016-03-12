@@ -36,8 +36,11 @@
 
         <activity
             android:name=".activitys.NoteAdd"
-            android:label="@string/activity_note_add_title">
-
+            android:label="@string/activity_note_add_title"
+            android:parentActivityName=".activitys.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.posterocompany.memo.activitys.MainActivity" />
         </activity>
     </application>
 

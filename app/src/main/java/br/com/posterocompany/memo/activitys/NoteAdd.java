@@ -24,6 +24,7 @@ public class NoteAdd extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+        this.getSupportActionBar().setHomeButtonEnabled(true);
 
         txtText = (EditText) findViewById(R.id.txtText);
         dateCreate = new Date();
@@ -41,7 +42,7 @@ public class NoteAdd extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.act_save:
                 this.saveNote();
-                getIntent().putExtra("noteId",note.getId());
+                getIntent().putExtra("noteId", note.getId());
                 this.setResult(RESULT_OK, getIntent());
                 this.finish();
                 return true;
@@ -53,7 +54,7 @@ public class NoteAdd extends AppCompatActivity {
         String text = txtText.getText().toString();
         note = new Note();
 
-        note.text = text;
+        note.text = text.trim();
         note.dateCreate = dateCreate;
         note.dateSave = new Date();
 

@@ -10,6 +10,7 @@ import java.util.List;
 
 import br.com.posterocompany.memo.R;
 import br.com.posterocompany.memo.models.Note;
+import br.com.posterocompany.memo.utils.Text;
 
 /**
  * Created by Francisco on 12/03/2016.
@@ -32,9 +33,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         Note note = notes.get(position);
 
-        holder.lblText.setText(note.text);
-        holder.lblDateCreate.setText(note.dateCreate.toString());
-        holder.lblDateSave.setText(note.dateSave.toString());
+        holder.lblText.setText(Text.reduceTextIn(note.text, 30));
+        holder.lblDateCreate.setText(Text.toDate(note.dateCreate));
+
+        String timeString = Text.toTime(note.dateCreate) + " ... " + Text.toTime(note.dateSave);
+
+        holder.lblDateSave.setText(timeString);
     }
 
     @Override
