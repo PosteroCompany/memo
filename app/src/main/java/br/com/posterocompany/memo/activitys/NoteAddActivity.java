@@ -1,19 +1,17 @@
 package br.com.posterocompany.memo.activitys;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.com.posterocompany.memo.R;
 import br.com.posterocompany.memo.models.Note;
 
-public class NoteAdd extends AppCompatActivity {
+public class NoteAddActivity extends AppCompatActivity {
 
     private Note note;
 
@@ -23,7 +21,7 @@ public class NoteAdd extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_note);
+        setContentView(R.layout.activity_note_add);
         this.getSupportActionBar().setHomeButtonEnabled(true);
 
         txtText = (EditText) findViewById(R.id.txtText);

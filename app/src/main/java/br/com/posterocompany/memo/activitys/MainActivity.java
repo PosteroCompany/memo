@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
 
     public static int REQUEST_NOTE_ADD = 1;
+    public static int REQUEST_NOTE_EDIT = 2;
 
     private List<Note> notes;
     private Note selectedNote;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this, NoteAdd.class), REQUEST_NOTE_ADD);
+                startActivityForResult(new Intent(MainActivity.this, NoteAddActivity.class), REQUEST_NOTE_ADD);
             }
         });
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        notes = Note.find(Note.class, "", null, "", "id desc", "");
+        notes = Note.listAllOrdered();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -118,8 +118,9 @@ public class MainActivity extends AppCompatActivity
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Note note = notes.get(position);
-                Snackbar.make(v, note.text, Snackbar.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity.this, NoteEditActivity.class);
+                intent.putExtra("noteId", notes.get(position).getId());
+                startActivityForResult(intent, REQUEST_NOTE_EDIT);
             }
         });
         ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity
             public boolean onItemLongClicked(RecyclerView recyclerView, int position, View v) {
                 selectedNote = notes.get(position);
 
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this,v,Gravity.END);
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v, Gravity.END);
                 popupMenu.setOnMenuItemClickListener(MainActivity.this);
                 popupMenu.inflate(R.menu.popup_note_menu);
                 popupMenu.show();
@@ -136,10 +137,10 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void deleteNote(){
+    public void deleteNote() {
         notes.remove(selectedNote);
         adapter.notifyDataSetChanged();
-        Snackbar.make(recyclerView, "Note deleted with success! ", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(recyclerView, "Note deleted with success!", Snackbar.LENGTH_SHORT).show();
 
     }
 
@@ -154,12 +155,22 @@ public class MainActivity extends AppCompatActivity
                     adapter.notifyDataSetChanged();
                 }
             }
+        } else if (requestCode == REQUEST_NOTE_EDIT) {
+            if (resultCode == RESULT_OK) {
+                Long noteId = data.getLongExtra("noteId", 0);
+                if (noteId != 0) {
+                    //notes.set(notes.indexOf(selectedNote), selectedNote);
+                    notes = Note.listAllOrdered();
+                    adapter = new NotesAdapter(notes);
+                    recyclerView.setAdapter(adapter);
+                }
+            }
         }
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.act_delete:
                 this.deleteNote();
                 return true;
