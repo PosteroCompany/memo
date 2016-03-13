@@ -10,4 +10,6 @@
     <string name="activity_note_edit_title">Edit Note</string>
     <string name="act_delete">Delete</string>
     <string name="act_history">History</string>
+    <string name="title_activity_history">History</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

@@ -144,6 +144,12 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void openHistory() {
+        Intent intent = new Intent(this, HistoryActivity.class);
+        intent.putExtra("noteId", selectedNote.getId());
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_NOTE_ADD) {
@@ -159,7 +165,6 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 Long noteId = data.getLongExtra("noteId", 0);
                 if (noteId != 0) {
-                    //notes.set(notes.indexOf(selectedNote), selectedNote);
                     notes = Note.listAllOrdered();
                     adapter = new NotesAdapter(notes);
                     recyclerView.setAdapter(adapter);
@@ -173,6 +178,9 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.act_delete:
                 this.deleteNote();
+                return true;
+            case R.id.act_note_history:
+                this.openHistory();
                 return true;
         }
         return false;
