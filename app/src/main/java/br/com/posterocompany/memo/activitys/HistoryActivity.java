@@ -88,7 +88,8 @@ public class HistoryActivity extends AppCompatActivity {
             lblDateCreate.setText(Text.toDate(update.dateCreate));
             String timeUpdate = Text.toTime(update.dateCreate) + " ... " + Text.toTime(update.dateUpdate);
             lblTimeUpdate.setText(timeUpdate);
-            lblText.setText(update.newText);
+
+            lblText.setText(Text.getDiffText(update.oldText,update.newText));
 
             return rootView;
         }

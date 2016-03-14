@@ -18,6 +18,7 @@
             android:id="@+id/txtText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="sans-serif-light"
             android:gravity="top|left"
             android:hint="Note" />
     </android.support.design.widget.TextInputLayout>
