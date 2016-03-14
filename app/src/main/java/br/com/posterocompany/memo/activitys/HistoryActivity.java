@@ -51,37 +51,11 @@ public class HistoryActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(pagerAdapter.getCount() - 1, true);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_history, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -143,7 +117,8 @@ public class HistoryActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             NoteUpdate update = updates.get(position);
 
-            return Text.toTime(update.dateCreate) + " ... " + Text.toTime(update.dateUpdate);
+            //return Text.toTime(update.dateCreate) + " ... " + Text.toTime(update.dateUpdate);
+            return "Version " + (position + 1);
         }
     }
 }

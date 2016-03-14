@@ -20,7 +20,24 @@ public class Note extends SugarRecord implements Serializable{
     }
 
     public List<NoteUpdate> getUpdates() {
-        return NoteUpdate.find(NoteUpdate.class, "note = ?", this.getId().toString());
+        List<NoteUpdate> updates = NoteUpdate.find(NoteUpdate.class, "note = ?", this.getId().toString());
+        NoteUpdate update = new NoteUpdate();
+        update.oldText = "";
+        update.dateCreate = this.dateCreate;
+
+        if(updates.size() > 0){
+            NoteUpdate firstUpdate = updates.get(0);
+            update.newText = firstUpdate.oldText;
+            update.dateUpdate = firstUpdate.dateCreate;
+        }
+        else {
+            update.newText = this.text;
+            update.dateUpdate = this.dateSave;
+        }
+
+        updates.add(0,update);
+
+        return updates;
     }
 
     public static List<Note> listAllOrdered(){
