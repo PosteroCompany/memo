@@ -13,4 +13,8 @@
     <string name="nav_repository">Repositório</string>
     <string name="txtNote">Nota</string>
     <string name="lblVersion">Versão</string>
+    <string name="nav_export">Exportar Notas</string>
+    <string name="note_deleted">Nota excluída com sucesso</string>
+    <string name="note_exported">Notas exportadas com sucesso</string>
+    <string name="sd_card_error">Por favor, verifique se seu cartão SD está correto</string>
 </resources>

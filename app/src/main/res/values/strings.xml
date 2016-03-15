@@ -14,4 +14,9 @@
     <string name="nav_contact">Contact</string>
     <string name="txtNote">Note</string>
     <string name="lblVersion">Version </string>
+    <string name="nav_export">Export Notes</string>
+
+    <string name="note_deleted">Note deleted successfully</string>
+    <string name="note_exported">Notes exported successfully</string>
+    <string name="sd_card_error">Please, verify if your sd card is correct</string>
 </resources>

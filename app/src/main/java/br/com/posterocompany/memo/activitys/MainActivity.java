@@ -1,8 +1,10 @@
 package br.com.posterocompany.memo.activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -18,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import br.com.posterocompany.memo.R;
@@ -25,6 +29,7 @@ import br.com.posterocompany.memo.adapters.NotesAdapter;
 import br.com.posterocompany.memo.models.Note;
 import br.com.posterocompany.memo.utils.DividerItemDecoration;
 import br.com.posterocompany.memo.utils.ItemClickSupport;
+import br.com.posterocompany.memo.utils.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
@@ -57,12 +62,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_repository:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/PosteroCompany/memo")));
                 break;
             case R.id.nav_contact:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://web-postero.rhcloud.com/")));
+                break;
+            case R.id.nav_export:
+                this.exportNotes();
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -131,8 +139,9 @@ public class MainActivity extends AppCompatActivity
 
     public void deleteNote() {
         notes.remove(selectedNote);
+        selectedNote.delete();
         adapter.notifyDataSetChanged();
-        Snackbar.make(recyclerView, "Note deleted with success!", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(recyclerView, this.getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show();
 
     }
 
@@ -140,6 +149,44 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, HistoryActivity.class);
         intent.putExtra("noteId", selectedNote.getId());
         startActivity(intent);
+    }
+
+    public void exportNotes() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            String filename = "memo_notes.txt";
+            String outputString = "";
+            File myDir = new File(Environment.getExternalStorageDirectory().toString() + "/PosteroCompany/Memo");
+
+            myDir.mkdirs();
+
+            for (Note note : Note.listAll(Note.class)) {
+
+                outputString += "Note ID: " + note.getId() + "\n";
+                outputString += "Note: " + note.text + "\n";
+                outputString += "Create Date: " + Text.toDateTime(note.dateCreate) + "\n";
+                outputString += "Save Date: " + Text.toDateTime(note.dateSave) + "\n";
+                outputString += "-----------------------\n";
+            }
+
+            try {
+                File file = new File(myDir, filename);
+                if (file.exists()) {
+                    file.delete();
+                }
+
+                FileOutputStream fos = new FileOutputStream(file);
+
+                fos.write(outputString.getBytes());
+                fos.flush();
+                fos.close();
+                //}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Snackbar.make(recyclerView, this.getString(R.string.note_exported), Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(recyclerView, this.getString(R.string.sd_card_error), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
