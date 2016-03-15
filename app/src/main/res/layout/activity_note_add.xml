@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:fontFamily="sans-serif-light"
             android:gravity="top|left"
-            android:hint="Note" />
+            android:hint="@string/txtNote" />
     </android.support.design.widget.TextInputLayout>
 
 

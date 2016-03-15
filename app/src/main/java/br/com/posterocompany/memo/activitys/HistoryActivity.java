@@ -1,5 +1,6 @@
 package br.com.posterocompany.memo.activitys;
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -89,7 +90,7 @@ public class HistoryActivity extends AppCompatActivity {
             String timeUpdate = Text.toTime(update.dateCreate) + " ... " + Text.toTime(update.dateUpdate);
             lblTimeUpdate.setText(timeUpdate);
 
-            lblText.setText(Text.getDiffText(update.oldText,update.newText));
+            lblText.setText(Text.getDiffText(update.oldText, update.newText));
 
             return rootView;
         }
@@ -116,10 +117,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            NoteUpdate update = updates.get(position);
-
-            //return Text.toTime(update.dateCreate) + " ... " + Text.toTime(update.dateUpdate);
-            return "Version " + (position + 1);
+            return (HistoryActivity.this).getResources().getString(R.string.lblVersion) + (position + 1);
         }
     }
 }

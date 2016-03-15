@@ -3,9 +3,9 @@
     <item
         android:id="@+id/nav_repository"
         android:icon="@drawable/ic_github_logo"
-        android:title="Repository" />
+        android:title="@string/nav_repository" />
     <item
         android:id="@+id/nav_contact"
         android:icon="@drawable/ic_nav_contact"
-        android:title="Contact" />
+        android:title="@string/nav_contact" />
 </menu>

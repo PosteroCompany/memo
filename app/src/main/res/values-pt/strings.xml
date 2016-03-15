@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Memo</string>
+    <string name="act_delete">Excluir</string>
+    <string name="act_history">Histórico</string>
+    <string name="act_save">Salvar</string>
+    <string name="activity_note_add_title">Adicionar Nota</string>
+    <string name="activity_note_edit_title">Editar Nota</string>
+    <string name="navigation_drawer_close">fechar navigation drawer</string>
+    <string name="navigation_drawer_open">abrir navigation drawer</string>
+    <string name="title_activity_history">Histórico</string>
+    <string name="nav_contact">Contato</string>
+    <string name="nav_repository">Repositório</string>
+    <string name="txtNote">Nota</string>
+    <string name="lblVersion">Versão</string>
+</resources>
